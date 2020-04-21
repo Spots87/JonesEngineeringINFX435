@@ -1,10 +1,10 @@
 from base import Session
-from models.task import Task
+from models.task import Task, TaskEncoder
 
 session = Session()
 
-tasks = session.query(Task).all()
+class TaskQuery():
 
-for task in tasks:
-   print(task.description)
+    def get_all():
+        return [TaskEncoder().encode(task) for task in session.query(Task).all()]
 

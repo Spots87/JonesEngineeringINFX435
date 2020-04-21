@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, Integer, Sequence
 from base import Base
+from json import JSONEncoder
 
 #Couldn't figure out how to create sequence from here
 #manually added through sql developer. Started with 4 since I had 3 entries in the table already
@@ -12,7 +13,8 @@ class Task(Base):
     description = Column(String)
 
     def __init__(self, description):
-        taskno = Sequence('task_id_seq')
-        self.taskno = taskno.next_value()
         self.description = description
 
+class TaskEncoder(JSONEncoder):
+    def default(self, o):
+        return o.asdict()
