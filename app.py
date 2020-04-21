@@ -1,9 +1,12 @@
-from flask import Flask
+from flask import Flask, render_template
 import flask_sqlalchemy
 import flask_restless
+import flask_bootstrap
 from sqlalchemy import Column, String, Integer, Sequence
 
 app = Flask(__name__)
+
+flask_bootstrap.Bootstrap(app)
 
 app.config.from_pyfile('config.py')
 
@@ -16,4 +19,8 @@ class Task(db.Model):
 
 manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
 manager.create_api(Task, methods=['GET', 'POST', 'PATCH', 'DELETE'])
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
