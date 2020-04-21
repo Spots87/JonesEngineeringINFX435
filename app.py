@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
 from sqlalchemy import Column, String, Integer, Sequence, Date
-from wtforms import Form, TextField, validators, StringField, SubmitField
+from wtforms import Form, TextField, validators, StringField, SubmitField, IntegerField
+import time
 import flask_sqlalchemy
 import flask_restless
 import flask_bootstrap
@@ -21,8 +22,8 @@ class SurveyRequestForm(Form):
     development = TextField("Development Name: ", validators=[validators.required()])
     client      = TextField("Client Name: ", validators=[validators.required()])
     location    = TextField("Location Name: ", validators=[validators.required()])
-    sRange      = TextField("Range: ", validators=[validators.required()])
-    section     = TextField("Section: ", validators=[validators.required()])
+    sRange      = TextField("Range: ", validators=[validators.required(), validators.length(min=2, max=2, message="Min and max length 2")])
+    section     = IntegerField("Section: ", validators=[validators.required(message="Must be integer value"), validators.number_range(min=1, max=100000, message="Must be integer between 1 and 100000")])
     township    = TextField("Township: ", validators=[validators.required()])
     requestedBy = TextField("Requested By: ", validators=[validators.required()])
 
@@ -70,20 +71,16 @@ def requestSurvey():
                     'client': request.form['client'],
                     'location': request.form['location'],
                     'range': request.form['sRange'],
-                    'section': int(request.form['section']),
+                    'section': request.form['section'],
                     'township': request.form['township'],
                     'requestedby': request.form['requestedBy']
             }
-            print(data)
             response = requests.post('http://localhost:5000/api/surveyrequest', json=data)
             if response.status_code == requests.codes.created:
-                flash('Request Created')
-                return redirect(url_for('home'))
-            else:
-                flash(f'Error {response.status_code}. {response.text}')
+                flash('Request Created. Redirecting....')
+                time.sleep(3)
 
-        else:
-            flash('Error. All form fields are required')
+                return redirect(url_for('home'))
     return render_template('requestSurvey.html', form=form)
 
 
