@@ -1,7 +1,7 @@
-from flask import Flask, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask
+import flask_sqlalchemy
+import flask_restless
 from sqlalchemy import Column, String, Integer, Sequence
-from flask_restful import reqparse
 
 app = Flask(__name__)
 
@@ -12,7 +12,7 @@ host = '0.0.0.0'
 port = 1521
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'oracle+cx_oracle://{user}:{password}@{tnsname}'
-db = SQLAlchemy(app)
+db = flask_sqlalchemy.SQLAlchemy(app)
 
 class Task(db.Model):
     __tablename__ = 'task'
@@ -28,9 +28,8 @@ class Task(db.Model):
             'description': self.description
         }
 
-@app.route('/tasks')
-def get_all_tasks():
-    tasks= [task.serialize() for task in Task.query.all()]
-    return jsonify(tasks)
+manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
 
-def add_task
+manager.create_api(Task, methods=['GET', 'POST'])
+
+app.run()
