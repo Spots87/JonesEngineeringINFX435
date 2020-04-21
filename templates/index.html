@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p> TODO..... </p>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for message in messages %}
+                {{ message[1] }}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 {% endblock %}
