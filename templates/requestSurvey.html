@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% from "_formhelpers.html" import render_field %}
 {% block content %}
-<form method=post>
+<div class="form-group">
+<form action="", role="form", method=post>
+    {{form.csrf}}
     <dl>
         {{ render_field(form.development)  }}
         {{ render_field(form.client)  }}
@@ -13,13 +15,5 @@
     </dl>
     <button type="submit" class="btn btn-success">Submit</button>
 </form>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-info">
-                    <p>{{ message }}</p>
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+</div>
 {% endblock %}

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from sqlalchemy import Column, String, Integer, Sequence, Date
+from sqlalchemy import Column, String, Integer, Sequence, Date, ForeignKey
 from wtforms import Form, TextField, validators, StringField, SubmitField, IntegerField
 import time
 import flask_sqlalchemy
@@ -17,6 +17,8 @@ app.config.from_pyfile('config.py')
 db = flask_sqlalchemy.SQLAlchemy(app)
 
 manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
+
+dateRegex = "^(([0-9])|([0-2][0-9])|([3][0-1]))\-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\-\d{2}$"
 
 class SurveyRequestForm(Form):
     development = TextField("Development Name: ", validators=[validators.required()])
@@ -47,13 +49,17 @@ class SurveyRequest(db.Model):
     istwosetsdrawings = db.Column(String, nullable=True)
     restakecount = db.Column(Integer)
 
-
-
 class Task(db.Model):
     __tablename__ = 'task'
     taskno = db.Column(Integer, Sequence('task_id_seq'), primary_key=True)
     description = db.Column(String)
 
+class SurveyPlan(db.Model):
+    __tablename__ = 'surveyplan'
+    planno = db.Column(Integer, Sequence('plan_id_seq'), primary_key=True)
+    jobno = db.Column(Integer, ForeignKey('surveyrequest.jobno'))
+    taskno = db.Column(Integer, ForeignKey('task.taskno'))
+    notes = db.Column(String)
 
 @app.route('/home')
 def home():
@@ -73,17 +79,28 @@ def requestSurvey():
                     'range': request.form['sRange'],
                     'section': request.form['section'],
                     'township': request.form['township'],
-                    'requestedby': request.form['requestedBy']
+                    'requestedby': request.form['requestedBy'],
+                    'restakecount': 0
             }
             response = requests.post('http://localhost:5000/api/surveyrequest', json=data)
             if response.status_code == requests.codes.created:
-                flash('Request Created. Redirecting....')
                 time.sleep(3)
 
                 return redirect(url_for('home'))
     return render_template('requestSurvey.html', form=form)
 
 
+@app.route('/plansurvey', methods=['GET', 'POST'])
+def planSurvey():
+    jobs = SurveyRequest.query.filter_by(completiondate=None)
+    tasks = Task.query.all()
+    if request.method == 'POST':
+        plan = SurveyPlan(jobno=request.form['surveyrequest'], taskno=request.form['task'], notes=request.form['notes'])
+        db.session.add(plan)
+        db.session.commit()
 
+
+
+    return render_template('planSurvey.html', jobs=jobs, tasks=tasks)
 manager.create_api(SurveyRequest, methods=['GET', 'POST', 'PATCH', 'DELETE'])
 manager.create_api(Task, methods=['GET', 'POST', 'PATCH', 'DELETE'])
