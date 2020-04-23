@@ -72,7 +72,7 @@ class Employee(db.Model):
 
 class Assigned(db.Model):
     __tablename__ = 'assigned'
-    assignno = db.Column(Integer, Sequence('assigned_id_seq', primary_key=True))
+    assignno = db.Column(Integer, Sequence('assigned_id_seq'), primary_key=True)
     crewno = db.Column(Integer, ForeignKey('crew.crewno'))
     workdate = db.Column(Date)
     notes = db.Column(String)
@@ -86,7 +86,7 @@ class SurveyPlan(db.Model):
 
 class Schedule(db.Model):
     __tablename__ = 'schedule'
-    scheduleno = db.Column(Intger, Sequence('schedule_id_seq'), primary_key=True)
+    scheduleno = db.Column(Integer, Sequence('schedule_id_seq'), primary_key=True)
     planno = db.Column(Integer, ForeignKey('surveyplan.planno'))
     jobno = db.Column(Integer, ForeignKey('surveyrequest.jobno'))
     assignno = db.Column(Integer, ForeignKey('assigned.assignno'))
