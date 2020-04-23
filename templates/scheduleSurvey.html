@@ -10,54 +10,135 @@
     {% endfor %}
   </select>
 </div>
-<div class="form-group">
-    <label>Development</label>
-<input id="development" class="form-control" type="text" readonly>
-</div>
-<div class="form-group">
-    <label>Client</label>
-<input id="client" class="form-control" type="text" readonly>
-</div>
-<div class="form-group">
-    <label>Contract Date</label>
-<input id="contractdate" class="form-control" type="text" readonly>
-</div>
-<div class="form-group">
-    <label>Location</label>
-<input id="location" class="form-control" type="text" readonly>
-</div>
-<div class="form-group">
-    <label>Range</label>
-<input id="range" class="form-control" type="text" readonly>
-</div>
-<div class="form-group">
-    <label>Section</label>
-<input id="section" class="form-control" type="text" readonly>
-</div>
-<div class="form-group">
-    <label>Township</label>
-<input id="township" class="form-control" type="text" readonly>
-</div>
-<div class="form-group">
-    <label>Date Requested</label>
-<input id="daterequested" class="form-control" type="text" readonly>
-</div>
-<div class="form-group">
-    <label>Requested By</label>
-<input id="requestedby" class="form-control" type="text" readonly>
-</div>
-<div class="form-group">
-    <label>Completion Date</label>
-<input id="completiondate" class="form-control" type="text" readonly>
-</div>
-<div class="form-group">
-    <label>Re-stake</label>
-<input id="restakecount" class="form-control" type="text" readonly>
-</div>
-<div class="form-group">
-    <label>2 sets of drawings</label>
-<input id="istwosetsdrawings" class="form-control" type="text" readonly>
-</div>
+        <table class="table table-sm">
+            <thead>
+                <th scope="col">Development</th>
+                <th>Client</th>
+                <th>Contract Date</th>
+                <th>Location</th>
+                <th>Range</th>
+                <th>Section</th>
+                <th>Township</th>
+                <th>Date Requested</th>
+                <th>Requested By</th>
+                <th>Completion Date</th>
+                <th>Restake Count</th>
+                <th>Two Sets of Drawings</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <div class="form-group">
+                    <input id="development" class="form-control" type="text" readonly>
+                    </div>
+                </td>
+                <td>    
+                    <div class="form-group">
+                    <input id="client" class="form-control" type="text" readonly>
+                    </div>
+                </td>
+                <td>    
+                    <div class="form-group">
+                    <input id="contractdate" class="form-control" type="text" readonly>
+                    </div>
+                </td>
+                <td>    
+                    <div class="form-group">
+                    <input id="location" class="form-control" type="text" readonly>
+                    </div>
+                </td>
+                <td>    
+                    <div class="form-group">
+                    <input id="range" class="form-control" type="text" readonly>
+                    </div>
+                </td>
+                <td>    
+                    <div class="form-group">
+                    <input id="section" class="form-control" type="text" readonly>
+                    </div>
+                </td>
+                <td>    
+                    <div class="form-group">
+                    <input id="township" class="form-control" type="text" readonly>
+                    </div>
+                </td>
+                <td>    
+                    <div class="form-group">
+                    <input id="daterequested" class="form-control" type="text" readonly>
+                    </div>
+                </td>
+                <td>    
+                    <div class="form-group">
+                    <input id="requestedby" class="form-control" type="text" readonly>
+                    </div>
+                </td>
+                <td>    
+                    <div class="form-group">
+                    <input id="completiondate" class="form-control" type="text" readonly>
+                    </div>
+                </td>
+                <td>    
+                    <div class="form-group">
+                    <input id="restakecount" class="form-control" type="text" readonly>
+                    </div>
+                </td>
+                <td>    
+                    <div class="form-group">
+                    <input id="istwosetsdrawings" class="form-control" type="text" readonly>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm">
+        <thead>
+            <th>Task No</th>
+            <th>Task Description</th>
+            <th>Task Notes</th>
+            <th>Crew</th>
+            <th>Work Date</th>
+            <th>Crew Notes</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <input id="taskno" class="form-control" type="text" readonly>
+                     </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input id="taskdescrip" class="form-control" type="text" readonly>
+                     </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input id="tasknotes" class="form-control" type="text" readonly>
+                     </div>
+                </td>
+                <td>
+                    <select id="crewno" class="form-control">
+                    <option selected>Assign Crew</option>
+                        {% for crew in crews %}
+                            <option value={{crew.crewno}}>{{crew.crewno}}</option>
+                        {% endfor %}
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input id="workdate" class="form-control" type="text">
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input id="crewnotes" class="form-control" type="text">
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
 
 
 

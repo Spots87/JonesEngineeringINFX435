@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, jsonify
 from sqlalchemy import Column, String, Integer, Sequence, Date, ForeignKey
 from wtforms import Form, TextField, validators, StringField, SubmitField, IntegerField
 import time
@@ -7,6 +7,7 @@ import flask_restless
 import flask_bootstrap
 import datetime
 import requests
+import json
 
 app = Flask(__name__)
 
@@ -19,6 +20,24 @@ db = flask_sqlalchemy.SQLAlchemy(app)
 manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
 
 dateRegex = "^(([0-9])|([0-2][0-9])|([3][0-1]))\-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\-\d{2}$"
+
+class AlchemyEncoder(json.JSONEncoder):
+
+    def default(self, obj):
+        if isinstance(obj.__class__, DeclarativeMeta):
+            fields = {}
+            for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
+                data = obj.__getattribute__(field)
+                try:
+                    json.dumps(data)
+                    fields[field] = data
+                except TypeError:
+                    fields[field] = None
+            return fields
+
+        return json.JSONEncoder.default(self, obj)
+
+
 
 class SurveyRequestForm(Form):
     development = TextField("Development Name: ", validators=[validators.required()])
@@ -154,12 +173,31 @@ def scheduleSurvey():
     for plan in plans:
         jobs.append(SurveyRequest.query.get(plan.jobno))
 
+    crews = Crew.query.all()
+
     if request.method == 'POST':
         pass
 
-    return render_template('scheduleSurvey.html', jobs=jobs, plans=plans)
+    return render_template('scheduleSurvey.html', jobs=jobs, plans=plans, crews=crews)
 
+@app.route('/getjobsurveyplan', methods=['GET'])
+def getjobSurveyPlan():
+    jobno = request.args.get('jobno')
+    unscheduled_plans =  db.session.query(SurveyPlan).join(Schedule, Schedule.planno == SurveyPlan.planno, isouter=True)
+    plans = None
+    for plan in unscheduled_plans:
+        plans = SurveyPlan.query.filter_by(jobno=jobno)
 
+    json_plans = []
+    for plan in plans:
+        json_plans.append({
+            'planno': str(plan.planno),
+            'jobno': str(plan.jobno),
+            'taskno': str(plan.taskno),
+            'notes': str(plan.notes)
+        })
+
+    return jsonify(json_plans)
 
 manager.create_api(SurveyRequest, methods=['GET', 'POST', 'PATCH', 'DELETE'])
 manager.create_api(Task, methods=['GET', 'POST', 'PATCH', 'DELETE'])
