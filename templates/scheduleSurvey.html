@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="", role="form", method=post, name="schedule">
+<div class="form-group">
+<label for="incompleteSchedule">Schedule</label>
+  <select id="jobno" class="form-control">
+    <option selected>Choose job</option>
+    {% for job in jobs %}
+    <option value={{job.jobno}}>Client:{{job.client}} Development: {{job.development}}</option>
+    {% endfor %}
+  </select>
+</div>
+<div class="form-group">
+    <label>Development</label>
+<input id="development" class="form-control" type="text" readonly>
+</div>
+<div class="form-group">
+    <label>Client</label>
+<input id="client" class="form-control" type="text" readonly>
+</div>
+<div class="form-group">
+    <label>Contract Date</label>
+<input id="contractdate" class="form-control" type="text" readonly>
+</div>
+<div class="form-group">
+    <label>Location</label>
+<input id="location" class="form-control" type="text" readonly>
+</div>
+<div class="form-group">
+    <label>Range</label>
+<input id="range" class="form-control" type="text" readonly>
+</div>
+<div class="form-group">
+    <label>Section</label>
+<input id="section" class="form-control" type="text" readonly>
+</div>
+<div class="form-group">
+    <label>Township</label>
+<input id="township" class="form-control" type="text" readonly>
+</div>
+<div class="form-group">
+    <label>Date Requested</label>
+<input id="daterequested" class="form-control" type="text" readonly>
+</div>
+<div class="form-group">
+    <label>Requested By</label>
+<input id="requestedby" class="form-control" type="text" readonly>
+</div>
+<div class="form-group">
+    <label>Completion Date</label>
+<input id="completiondate" class="form-control" type="text" readonly>
+</div>
+<div class="form-group">
+    <label>Re-stake</label>
+<input id="restakecount" class="form-control" type="text" readonly>
+</div>
+<div class="form-group">
+    <label>2 sets of drawings</label>
+<input id="istwosetsdrawings" class="form-control" type="text" readonly>
+</div>
+
+
+
+  <button type="submit" class="btn btn-success">Submit</button>
+</form>
+<script type="text/javascript" src="{{url_for('static', filename='js/schedule.js')}}"></script>
+{% endblock %}

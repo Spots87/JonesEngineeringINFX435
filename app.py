@@ -144,5 +144,22 @@ def planSurvey():
 
 
     return render_template('planSurvey.html', jobs=jobs, tasks=tasks)
+
+@app.route('/schedulesurvey', methods=['GET', 'POST'])
+def scheduleSurvey():
+    #surveyplans that have not been scheduled
+    plans =  db.session.query(SurveyPlan).join(Schedule, Schedule.planno == SurveyPlan.planno, isouter=True)
+    #jobs in that each plan
+    jobs = []
+    for plan in plans:
+        jobs.append(SurveyRequest.query.get(plan.jobno))
+
+    if request.method == 'POST':
+        pass
+
+    return render_template('scheduleSurvey.html', jobs=jobs, plans=plans)
+
+
+
 manager.create_api(SurveyRequest, methods=['GET', 'POST', 'PATCH', 'DELETE'])
 manager.create_api(Task, methods=['GET', 'POST', 'PATCH', 'DELETE'])
