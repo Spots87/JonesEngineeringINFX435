@@ -54,12 +54,54 @@ class Task(db.Model):
     taskno = db.Column(Integer, Sequence('task_id_seq'), primary_key=True)
     description = db.Column(String)
 
+class FieldBook(db.Model):
+    __tablename__ = 'fieldbook'
+    fieldbookno = db.Column(Integer, Sequence('fieldbook_id_seq'), primary_key=True)
+    bookpath = db.Column(String)
+
+class Crew(db.Model):
+    __tablename__ = 'crew'
+    crewno = db.Column(Integer, Sequence('crew_id_seq'), primary_key=True)
+
+class Employee(db.Model):
+    __tablename__ = 'employee'
+    employeeno = db.Column(Integer, Sequence('employee_id_seq'), primary_key=True)
+    firstname = db.Column(String)
+    lastname = db.Column(String)
+    crewno = db.Column(Integer, ForeignKey('crew.crewno'))
+
+class Assigned(db.Model):
+    __tablename__ = 'assigned'
+    assignno = db.Column(Integer, Sequence('assigned_id_seq', primary_key=True))
+    crewno = db.Column(Integer, ForeignKey('crew.crewno'))
+    workdate = db.Column(Date)
+    notes = db.Column(String)
+
 class SurveyPlan(db.Model):
     __tablename__ = 'surveyplan'
     planno = db.Column(Integer, Sequence('plan_id_seq'), primary_key=True)
     jobno = db.Column(Integer, ForeignKey('surveyrequest.jobno'))
     taskno = db.Column(Integer, ForeignKey('task.taskno'))
     notes = db.Column(String)
+
+class Schedule(db.Model):
+    __tablename__ = 'schedule'
+    scheduleno = db.Column(Intger, Sequence('schedule_id_seq'), primary_key=True)
+    planno = db.Column(Integer, ForeignKey('surveyplan.planno'))
+    jobno = db.Column(Integer, ForeignKey('surveyrequest.jobno'))
+    assignno = db.Column(Integer, ForeignKey('assigned.assignno'))
+    employeeno = db.Column(Integer, ForeignKey('employee.employeeno'))
+    scheduleDate = db.Column(Date)
+
+class SurveyReport(db.Model):
+    __tablename__ = 'surveyreport'
+    reportno = db.Column(Integer, Sequence('report_id_seq'), primary_key=True)
+    jobno = db.Column(Integer, ForeignKey('surveyrequest.jobno'))
+    scheduleno = db.Column(Integer, ForeignKey('schedule.scheduleno'))
+    iscomplete = db.Column(String)
+    fieldbookno = db.Column(Integer, ForeignKey('fieldbook.fieldbookno'))
+    beginningpageno = db.Column(Integer)
+    employeeno = db.Column(Integer, ForeignKey('employee.employeeno'))
 
 @app.route('/home')
 def home():
