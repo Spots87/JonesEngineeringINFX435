@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-<form action="", role="form", method=post, name="schedule">
+<form action="", role="form", method="post", name="schedule">
 <div class="form-group">
 <label for="incompleteSchedule">Schedule</label>
-  <select id="jobno" class="form-control">
+  <select id="jobno" class="form-control" name="jobno">
     <option selected>Choose job</option>
     {% for job in jobs %}
     <option value={{job.jobno}}>Client:{{job.client}} Development: {{job.development}}</option>
@@ -87,6 +87,11 @@
                     <input id="istwosetsdrawings" class="form-control" type="text" readonly>
                     </div>
                 </td>
+                <td>
+                    <div class="form-group">
+                        <input id="planno" name="planno" type="hidden" class="form-control" type="text">
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -98,6 +103,7 @@
             <th>Crew</th>
             <th>Work Date</th>
             <th>Crew Notes</th>
+            <th>Employee Number</th>
         </thead>
         <tbody>
             <tr>
@@ -117,7 +123,7 @@
                      </div>
                 </td>
                 <td>
-                    <select id="crewno" class="form-control">
+                    <select id="crewno" name="crewno" class="form-control">
                     <option selected>Assign Crew</option>
                         {% for crew in crews %}
                             <option value={{crew.crewno}}>{{crew.crewno}}</option>
@@ -125,23 +131,22 @@
                 </td>
                 <td>
                     <div class="form-group">
-                        <input id="workdate" class="form-control" type="text">
+                        <input id="workdate" name="workdate" class="form-control" type="text" placeholder="DD-MMM-YYYY">
                     </div>
                 </td>
                 <td>
                     <div class="form-group">
-                        <input id="crewnotes" class="form-control" type="text">
+                        <input id="crewnotes" name="crewnotes" class="form-control" type="text">
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input id="employeeno" name="employeeno" class="form-control" type="text">
                     </div>
                 </td>
             </tr>
         </tbody>
     </table>
-
-
-
-
-
-
   <button type="submit" class="btn btn-success">Submit</button>
 </form>
 <script type="text/javascript" src="{{url_for('static', filename='js/schedule.js')}}"></script>

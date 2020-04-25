@@ -49,7 +49,7 @@ class SurveyRequestForm(Form):
     requestedBy = TextField("Requested By: ", validators=[validators.required()])
 
 def _getDate():
-    return datetime.datetime.now()
+    return datetime.datetime.now().date()
 
 #fields need to be all lowercase and same name as db
 class SurveyRequest(db.Model):
@@ -110,7 +110,7 @@ class Schedule(db.Model):
     jobno = db.Column(Integer, ForeignKey('surveyrequest.jobno'))
     assignno = db.Column(Integer, ForeignKey('assigned.assignno'))
     employeeno = db.Column(Integer, ForeignKey('employee.employeeno'))
-    scheduleDate = db.Column(Date)
+    scheduledate = db.Column(Date)
 
 class SurveyReport(db.Model):
     __tablename__ = 'surveyreport'
@@ -150,7 +150,6 @@ def requestSurvey():
                 return redirect(url_for('home'))
     return render_template('requestSurvey.html', form=form)
 
-
 @app.route('/plansurvey', methods=['GET', 'POST'])
 def planSurvey():
     jobs = SurveyRequest.query.filter_by(completiondate=None)
@@ -159,8 +158,6 @@ def planSurvey():
         plan = SurveyPlan(jobno=request.form['surveyrequest'], taskno=request.form['task'], notes=request.form['notes'])
         db.session.add(plan)
         db.session.commit()
-
-
 
     return render_template('planSurvey.html', jobs=jobs, tasks=tasks)
 
@@ -176,8 +173,24 @@ def scheduleSurvey():
     crews = Crew.query.all()
 
     if request.method == 'POST':
-        pass
-
+        assign = Assigned(crewno=request.form['crewno'],
+                        workdate=request.form['workdate'],
+                        notes=request.form['crewnotes']
+        )
+        db.session.add(assign)
+        db.session.flush()
+        assignno = assign.assignno
+        db.session.commit()
+        date = _getDate()
+        schedule = Schedule(
+            planno=request.form['planno'],
+            jobno=request.form['jobno'],
+            assignno=assignno,
+            employeeno=request.form['employeeno'],
+            scheduledate= date
+        )
+        db.session.add(schedule)
+        db.session.commit()
     return render_template('scheduleSurvey.html', jobs=jobs, plans=plans, crews=crews)
 
 @app.route('/getjobsurveyplan', methods=['GET'])

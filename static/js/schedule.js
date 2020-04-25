@@ -16,6 +16,8 @@ $("#jobno").change(function (){
     let jobSurveyPlanUrl = `${baseUrl}/getjobsurveyplan?jobno=${jobno}`
     $.getJSON(jobSurveyPlanUrl, function(data){
         $.each(data, function(i, obj){
+            $("#planno").val(obj.planno)
+            console.log("plan no " + obj.planno)
             taskno = obj.taskno
             $("#taskno").val(taskno)
             $("#tasknotes").val(obj.notes)
