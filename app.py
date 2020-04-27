@@ -155,9 +155,12 @@ def planSurvey():
     jobs = SurveyRequest.query.filter_by(completiondate=None)
     tasks = Task.query.all()
     if request.method == 'POST':
-        plan = SurveyPlan(jobno=request.form['surveyrequest'], taskno=request.form['task'], notes=request.form['notes'])
-        db.session.add(plan)
-        db.session.commit()
+        data = request.get_json()
+        jobno = data['jobno']
+        for task in data['tasks']:
+            plan = SurveyPlan(jobno=jobno, taskno=task['taskno'], notes=task['tasknotes'])
+            db.session.add(plan)
+            db.session.commit()
 
     return render_template('planSurvey.html', jobs=jobs, tasks=tasks)
 
