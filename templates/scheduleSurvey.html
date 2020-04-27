@@ -95,7 +95,7 @@
             </tr>
             </tbody>
         </table>
-        <table class="table table-sm">
+        <table id="tasksTable" class="table table-sm">
         <thead>
             <th>Task No</th>
             <th>Task Description</th>
@@ -106,45 +106,6 @@
             <th>Employee Number</th>
         </thead>
         <tbody>
-            <tr>
-                <td>
-                    <div class="form-group">
-                        <input id="taskno" class="form-control" type="text" readonly>
-                     </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input id="taskdescrip" class="form-control" type="text" readonly>
-                     </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input id="tasknotes" class="form-control" type="text" readonly>
-                     </div>
-                </td>
-                <td>
-                    <select id="crewno" name="crewno" class="form-control">
-                    <option selected>Assign Crew</option>
-                        {% for crew in crews %}
-                            <option value={{crew.crewno}}>{{crew.crewno}}</option>
-                        {% endfor %}
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input id="workdate" name="workdate" class="form-control" type="text" placeholder="DD-MMM-YYYY">
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input id="crewnotes" name="crewnotes" class="form-control" type="text">
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input id="employeeno" name="employeeno" class="form-control" type="text">
-                    </div>
-                </td>
-            </tr>
         </tbody>
     </table>
   <button type="submit" class="btn btn-success">Submit</button>

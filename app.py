@@ -168,7 +168,7 @@ def planSurvey():
 def scheduleSurvey():
     #surveyplans that have not been scheduled
     plans =  db.session.query(SurveyPlan).join(Schedule, Schedule.planno == SurveyPlan.planno, isouter=True)
-    #jobs in that each plan
+    #jobs in each plan
     jobs = []
     for plan in plans:
         jobs.append(SurveyRequest.query.get(plan.jobno))
