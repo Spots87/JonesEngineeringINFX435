@@ -35,7 +35,7 @@ $("#jobno").change(function (){
                      </div>
                 </td>
                 <td>
-                    <select id="crewno" name="crewno" class="form-control">
+                    <select id=${obj.taskno}_crews class="form-control">
                     <option selected>Assign Crew</option>
                 </td>
                 <td>
@@ -58,6 +58,11 @@ $("#jobno").change(function (){
             $.getJSON(`${baseUrl}/api/task/${obj.taskno}`, function(data){
                 $(`#${obj.taskno}_descrip`).val(data.description)
 
+            })
+            $.getJSON(`${baseUrl}/api/crew`, function(data){
+                data['objects'].forEach(function(item){
+                    $(`#${obj.taskno}_crews`).append(`<option value=${item['crewno']}>${item['crewno']}</option>`)
+                })
             })
         })
     })
