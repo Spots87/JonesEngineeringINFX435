@@ -67,3 +67,12 @@ $("#jobno").change(function (){
         })
     })
 });
+$("scheduleForm").submit(function(e){
+    e.preventDefault();
+    //TODO alter database. assigned needs foreign key of taskno
+    //assign: crewno, workdate, notes, taskno
+    //POST To assign. return assigno
+    //schedule: planno jobno assignno employeeno, scheduledate
+    //POST To schedule
+
+})

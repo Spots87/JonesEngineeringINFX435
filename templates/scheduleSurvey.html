@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<form action="", role="form", method="post", name="schedule">
+<form id="scheduleForm" action="", role="form", method="post", name="schedule">
 <div class="form-group">
 <label for="incompleteSchedule">Schedule</label>
   <select id="jobno" class="form-control" name="jobno">
@@ -108,7 +108,7 @@
         <tbody>
         </tbody>
     </table>
-  <button type="submit" class="btn btn-success">Submit</button>
+  <button id="submitSchedule" type="submit" class="btn btn-success">Submit</button>
 </form>
 <script type="text/javascript" src="{{url_for('static', filename='js/schedule.js')}}"></script>
 {% endblock %}
