@@ -117,7 +117,7 @@ class SurveyReport(db.Model):
     reportno = db.Column(Integer, Sequence('report_id_seq'), primary_key=True)
     jobno = db.Column(Integer, ForeignKey('surveyrequest.jobno'))
     scheduleno = db.Column(Integer, ForeignKey('schedule.scheduleno'))
-    iscomplete = db.Column(String)
+    iscompleted = db.Column(String)
     fieldbookno = db.Column(Integer, ForeignKey('fieldbook.fieldbookno'))
     beginningpageno = db.Column(Integer)
     employeeno = db.Column(Integer, ForeignKey('employee.employeeno'))
@@ -212,5 +212,24 @@ def getjobSurveyPlan():
 
     return jsonify(json_plans)
 
+@app.route('/fieldworkreport', methods=['GET', 'POST'])
+def fieldworkReport():
+    #getting all the jobs that have a schedule but have no fieldwork and those that are incomplete
+    scheduleNoFieldWork = db.session.query(Schedule).join(SurveyReport, Schedule.scheduleno == SurveyReport.scheduleno, isouter=True)
+    incompleteFieldWork = SurveyReport.query.filter_by(iscompleted='N')
+    jobs = []
+    for schedule in scheduleNoFieldWork:
+        jobs.append(SurveyRequest.query.get(schedule.jobno))
+    for work in incompleteFieldWork:
+        jobs.append(SurveyRequest.query.get(work.jobno))
+
+    if request.method == 'POST':
+        pass
+
+
+    return render_template('fieldreport.html', jobs=jobs)
+
 manager.create_api(SurveyRequest, methods=['GET', 'POST', 'PATCH', 'DELETE'])
 manager.create_api(Task, methods=['GET', 'POST', 'PATCH', 'DELETE'])
+manager.create_api(Assigned, methods=['GET'])
+manager.create_api(Schedule, methods=['GET'])
