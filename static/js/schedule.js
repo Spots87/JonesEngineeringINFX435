@@ -124,7 +124,7 @@ $("#scheduleForm").submit(function(e){
                     success: function(data){
                         count++
                         if(count == assignedObjs.length){
-                            location.ref= `${baseUrl}/home`
+                            location.href= `${baseUrl}/home`
                         }
                     }
                 })
