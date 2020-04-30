@@ -4,7 +4,11 @@
 <!-- Select Task -->
 <!-- Enter field work info -->
 
-<form action="", role="form", method="post", name="fieldwork">
+<form id="fieldworkForm" action="", role="form", method="post", name="fieldwork">
+<div class="form-group">
+  <label for="employee">Employee Number</label>
+  <input id="employeeno" class="form-control" type="text">
+</div>
 <div class="form-group">
 <label for="incompleteFieldWork">Job</label>
   <select id="jobno" class="form-control" name="jobno">
@@ -75,65 +79,17 @@
             </tr>
             </tbody>
         </table>
-        <table class="table table-sm">
+        <table id="workdetails" class="table table-sm">
         <thead>
             <th>Task No</th>
             <th>Task Description</th>
             <th>Task Notes</th>
             <th>Work Date</th>
-            <th>Employee Number</th>
             <th>Completed</th>
-            <th>Beginning Page Noo</th>
+            <th>Beginning Page No</th>
             <th>Book No</th>
         </thead>
         <tbody>
-            <tr>
-                <td>
-                    <div class="form-group">
-                        <input id="taskno" class="form-control" type="text" readonly>
-                     </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input id="taskdescrip" class="form-control" type="text" readonly>
-                     </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input id="tasknotes" class="form-control" type="text" readonly>
-                     </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input id="workdate" name="workdate" class="form-control" type="text" readonly>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input id="employeeno" name="employeeno" class="form-control" type="text">
-                    </div>
-                </td>
-                <td>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="isComplete" id="completeTask" value="Y" checked>
-                        <label class="form-check-label" for="completeTask">Complete</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="isComplete" id="incompleteTask" value="N">
-                        <label class="form-check-label" for="completeTask">Incomplete</label>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input id="pageno" name="pageno" class="form-control" type="text">
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input id="bookno" name="bookno" class="form-control" type="text">
-                    </div>
-                </td>
-            </tr>
         </tbody>
     </table>
   <button type="submit" class="btn btn-success">Submit</button>
