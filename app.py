@@ -93,6 +93,7 @@ class Assigned(db.Model):
     __tablename__ = 'assigned'
     assignno = db.Column(Integer, Sequence('assigned_id_seq'), primary_key=True)
     crewno = db.Column(Integer, ForeignKey('crew.crewno'))
+    taskno = db.Column(Integer, ForeignKey('task.taskno'))
     workdate = db.Column(Date)
     notes = db.Column(String)
 
@@ -234,6 +235,6 @@ def fieldworkReport():
 
 manager.create_api(SurveyRequest, methods=['GET', 'POST', 'PATCH', 'DELETE'])
 manager.create_api(Task, methods=['GET', 'POST', 'PATCH', 'DELETE'])
-manager.create_api(Assigned, methods=['GET'])
-manager.create_api(Schedule, methods=['GET'])
+manager.create_api(Assigned, methods=['GET', 'POST'])
+manager.create_api(Schedule, methods=['GET', 'POST'])
 manager.create_api(Crew, methods=['GET'])
