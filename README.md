@@ -1,6 +1,6 @@
 # JonesEngineeringINFX435
 
-##Prerequisites
+## Prerequisites
 
 Oracle19c
 
@@ -8,17 +8,19 @@ Python >=3.7
 
 Pip >=9.0.3
 
-##Setup
+## Setup
 
 Run jones_engineering.sql 
 
 Change config.py to your Oracle19c configuration 
 
-python3 -m pip install -r requirements.txt
+`python3 -m pip install -r requirements.txt`
 
-export FLASK_APP=app
+`export FLASK_APP=app`
 
 
-##Start app
+## Start app
 
-python3 -m flask run
+`python3 -m flask run`
+
+Navigate to http://localhost:5000/home
