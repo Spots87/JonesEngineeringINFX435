@@ -1,8 +1,24 @@
 # JonesEngineeringINFX435
-Change config.py to your settings
+
+##Prerequisites
+
+Oracle19c
+
+Python >=3.7
+
+Pip >=9.0.3
+
+##Setup
+
+Run jones_engineering.sql 
+
+Change config.py to your Oracle19c configuration 
 
 python3 -m pip install -r requirements.txt
 
 export FLASK_APP=app
+
+
+##Start app
 
 python3 -m flask run
