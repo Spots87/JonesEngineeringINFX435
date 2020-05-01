@@ -233,37 +233,81 @@ def fieldworkReport():
 
     return render_template('fieldreport.html', jobs=jobs)
 
+@app.route('/weeklyinfo', methods=['GET'])
+def weeklyinfo():
+
+    today = _getDate()
+    today = datetime.strftime(today, '%d-%b-%y')
+    week_after = datetime.now() + timedelta(days=7)
+    week_after = datetime.strftime(week_after, '%d-%b-%y')
+    scheduledetails = []
+    allinfo = db.session.query(SurveyRequest, Task, SurveyPlan, Assigned, Schedule).filter(
+        SurveyRequest.jobno == Schedule.jobno).filter(
+            Assigned.assignno == Schedule.assignno).filter(
+                Assigned.workdate >= today, Assigned.workdate <= week_after).filter(
+                    SurveyPlan.jobno == SurveyRequest.jobno).filter(
+                        Task.taskno == Assigned.taskno).all()
+
+    biglistinfo = []
+    for x in allinfo:
+        for y in x:
+            biglistinfo.append(y)
+
+
+    schedule = {'jobno': None,
+                'tasks': [],
+                'development': None,
+                'restakecount': None}
+
+    for b in biglistinfo:
+        if isinstance(b, SurveyRequest):
+            if b.jobno != schedule['jobno']:
+                schedule['jobno'] = b.jobno
+                schedule['development'] = b.development
+                schedule['restakecount'] = b.restakecount
+                scheduledetails.append(schedule)
+
+    for b in biglistinfo:
+        if isinstance(b, Task):
+            for schedule in scheduledetails:
+                if not any(t['taskno'] == b.taskno for t in schedule['tasks']):
+                    schedule['tasks'].append({'taskno': b.taskno, 'taskdesc': b.description})
+
+    for b in biglistinfo:
+        if isinstance(b, SurveyPlan):
+            for schedule in scheduledetails:
+                if any(t['taskno'] == b.taskno for t in schedule['tasks']):
+                    for t in schedule['tasks']:
+                        if t['taskno'] == b.taskno:
+                            if b.notes is None:
+                                t['notes'] = ""
+                            else:
+                                t['notes'] = b.notes
+
+    for b in biglistinfo:
+        if isinstance(b, Assigned):
+            for schedule in scheduledetails:
+                if any(t['taskno'] == b.taskno for t in schedule['tasks']):
+                    for t in schedule['tasks']:
+                        if t['taskno'] == b.taskno:
+                            t['crewno'] = b.crewno
+                            if b.notes is None:
+                                t['assignnotes'] = ""
+                            else:
+                                t['assignnotes'] = b.notes
+
+    return jsonify(scheduledetails)
+
 @app.route('/weeklyschedule', methods=['GET'])
 def weeklyschedule():
     today = _getDate()
     today = datetime.strftime(today, '%d-%b-%y')
     week_after = datetime.now() + timedelta(days=7)
     week_after = datetime.strftime(week_after, '%d-%b-%y')
-    scheduledetails = []
-    w_assigned = Assigned.query.filter(Assigned.workdate >= today, Assigned.workdate <= week_after).all()
-    for a in w_assigned:
-        sinfo = {
-            'crewno': a.crewno,
-            'assignnotes': a.notes,
-            'tasks': [],
-        }
-        s = Schedule.query.filter_by(assignno=a.assignno).first()
-        sinfo['jobno'] = s.jobno
-        sr = SurveyRequest.query.filter_by(jobno=sinfo['jobno']).first()
-        sinfo['development'] = sr.development
-        sinfo['restake'] = sr.restakecount
-        sp = SurveyPlan.query.filter_by(jobno=sinfo['jobno']).all()
-        for p in sp:
-            task = {
-                'taskno': p.taskno,
-                'notes': p.notes,
-            }
-            t = Task.query.get(p.taskno)
-            task['description'] = t.description
-            sinfo['tasks'].append(task)
-        scheduledetails.append(sinfo)
 
-    return render_template('weeklySchedule.html', schedules=scheduledetails)
+
+
+    return render_template('weeklySchedule.html', start=today, end=week_after)
 
 
 

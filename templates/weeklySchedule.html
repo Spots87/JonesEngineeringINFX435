@@ -1,34 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
-<table class="table">
-    <thead>
-        <tr>
-            <th>Crew</th>
-            <th>Job No</th>
-            <th>Development</th>
-            <th>Notes</th>
-            <th>Re-stake</th>
-            <th>Task No</th>
-            <th>Task Desc</th>
-            <th>Task Notes<th>
-        </tr>
-    <thead>
-    <tbody>
-    {% for schedule in schedules %}
-        <tr>
-            <td>{{schedule['crewno']}}</td>
-            <td>{{schedule['jobno']}}</td>
-            <td>{{schedule['development']}}</td>
-            <td>{{schedule['assignnotes']}}</td>
-            {% for task in schedule['tasks'] %}
-                <td>{{task['taskno']}}<td>
-                <td>{{task['description']}}</td>
-                <td>{{task['notes']}}</td>
+<h2>{{start}} to {{end}}</h2>
+<div class="col-xs-6">
+    <div class="table-responsive">
+        <table id="jobinfo" class="table table-striped">
+            <thead>
                 <tr>
-            {% endfor %}
-    {% endfor %}
-    </tbody>
-</table>
+                    <th>Job No</th>
+                    <th>Development</th>
+                    <th>Re-stake</th>
+                </tr>
+            <thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-xs-6">
+    <div class="table-responsive">
+        <table id="taskinfo" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Task No</th>
+                    <th>Task Description</th>
+                    <th>Task Notes</th>
+                    <th>Crew No</th>
+                    <th>Assignment Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript" src="{{url_for('static', filename='js/weeklyschedule.js')}}"></script>
 {% endblock %}
                         
-
