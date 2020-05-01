@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Crew</th>
+            <th>Job No</th>
+            <th>Development</th>
+            <th>Notes</th>
+            <th>Re-stake</th>
+            <th>Task No</th>
+            <th>Task Desc</th>
+            <th>Task Notes<th>
+        </tr>
+    <thead>
+    <tbody>
+    {% for schedule in schedules %}
+        <tr>
+            <td>{{schedule['crewno']}}</td>
+            <td>{{schedule['jobno']}}</td>
+            <td>{{schedule['development']}}</td>
+            <td>{{schedule['assignnotes']}}</td>
+            {% for task in schedule['tasks'] %}
+                <td>{{task['taskno']}}<td>
+                <td>{{task['description']}}</td>
+                <td>{{task['notes']}}</td>
+                <tr>
+            {% endfor %}
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+                        
+

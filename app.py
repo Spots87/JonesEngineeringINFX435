@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, jsonify
-from sqlalchemy import Column, String, Integer, Sequence, Date, ForeignKey
+from sqlalchemy import Column, String, Integer, Sequence, Date, ForeignKey, between, and_
 from wtforms import Form, TextField, validators, StringField, SubmitField, IntegerField
 import time
 import flask_sqlalchemy
 import flask_restless
 import flask_bootstrap
-import datetime
+from datetime import datetime, timedelta
 import requests
 import json
 
@@ -49,7 +49,7 @@ class SurveyRequestForm(Form):
     requestedBy = TextField("Requested By: ", validators=[validators.required()])
 
 def _getDate():
-    return datetime.datetime.now().date()
+    return datetime.now().date()
 
 #fields need to be all lowercase and same name as db
 class SurveyRequest(db.Model):
@@ -232,6 +232,45 @@ def fieldworkReport():
 
 
     return render_template('fieldreport.html', jobs=jobs)
+
+@app.route('/weeklyschedule', methods=['GET'])
+def weeklyschedule():
+    today = _getDate()
+    today = datetime.strftime(today, '%d-%b-%y')
+    week_after = datetime.now() + timedelta(days=7)
+    week_after = datetime.strftime(week_after, '%d-%b-%y')
+    scheduledetails = []
+    w_assigned = Assigned.query.filter(Assigned.workdate >= today, Assigned.workdate <= week_after).all()
+    for a in w_assigned:
+        sinfo = {
+            'crewno': a.crewno,
+            'assignnotes': a.notes,
+            'tasks': [],
+        }
+        s = Schedule.query.filter_by(assignno=a.assignno).first()
+        sinfo['jobno'] = s.jobno
+        sr = SurveyRequest.query.filter_by(jobno=sinfo['jobno']).first()
+        sinfo['development'] = sr.development
+        sinfo['restake'] = sr.restakecount
+        sp = SurveyPlan.query.filter_by(jobno=sinfo['jobno']).all()
+        for p in sp:
+            task = {
+                'taskno': p.taskno,
+                'notes': p.notes,
+            }
+            t = Task.query.get(p.taskno)
+            task['description'] = t.description
+            sinfo['tasks'].append(task)
+        scheduledetails.append(sinfo)
+
+    return render_template('weeklySchedule.html', schedules=scheduledetails)
+
+
+
+
+
+
+
 
 manager.create_api(SurveyRequest, methods=['GET', 'POST', 'PATCH', 'DELETE'])
 manager.create_api(Task, methods=['GET', 'POST', 'PATCH', 'DELETE'])
